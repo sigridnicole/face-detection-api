@@ -46,7 +46,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
-  res.send('it is woeking!'); // test server
+  res.send('it is working!'); // test server
   // res.send(database.users);
 })
 

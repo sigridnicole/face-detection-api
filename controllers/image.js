@@ -14,10 +14,11 @@ const handleApiCall = (req,res) => {              ///imageurl
 }
 
 const handleImage = (req, res, db) => { //image
-  const {id,faceCount} = req.body;
-  console.log('faceCount api',faceCount);
+  const {id,entries} = req.body;
+  console.log("req.body image", req.body);
+  console.log('faceCount api',entries);
   db('users').where('id','=',id)
-    .increment('entries',faceCount) 
+    .increment('entries',entries) 
     .returning('entries')
     .then(entries=>{
       res.json(entries[0])
