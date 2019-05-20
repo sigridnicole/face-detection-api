@@ -50,13 +50,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  signin.handleSignin(req, res, db, bcrypt);
+  signin.signinAuthentication(req, res, db, bcrypt);
 });
 
+// add authentication middleware
 app.put("/image", (req, res) => {
   image.handleImage(req, res, db);
 });
 
+// add authentication middleware
 app.post("/imageurl", (req, res) => {
   image.handleApiCall(req, res);
 });
@@ -65,10 +67,11 @@ app.post("/register", (req, res) => {
   register.handleRegister(req, res, db, bcrypt);
 });
 
+// build profile page in frontend and add authentication middleware
 app.get("/profile/:id", (req, res) => {
   profile.handleProfileGet(req, res, db);
 });
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`app is running on port ${process.env.PORT}`);
-});
+});   
