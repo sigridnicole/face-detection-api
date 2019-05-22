@@ -3,20 +3,13 @@ const jwt = require("jsonwebtoken");
 const signToken = (email) => {
   const jwtPayload = { email };
   return jwt.sign(jwtPayload, 'JWT_SECRET_KEY', { expiresIn: '2 days' });
-  //change secret key
+  //change jwt secret key
 };
 
-const setToken = (data, token) => {
-  // save token to passport or redis
-  return { data }
-}
-
-const createToken = (data) => {
-  const { email, id } = data;
+const createToken = (user) => {
+  const { email, id } = user;
   const token = signToken(email);
-  return setToken(data, token)
-    .then((data) => data)
-    .catch(console.log);
+  return { token, user };
 }
 
 const handleSignin = (db, bcrypt, req, res) => {
@@ -43,8 +36,10 @@ const handleSignin = (db, bcrypt, req, res) => {
 const signinAuthentication = (req, res, db, bcrypt) => {
   return handleSignin(db, bcrypt, req, res)
     .then(data =>
-      data.id && data.email ? createToken(data) : Promise.reject(data))
-    .then(data => res.json(data))
+      data.id && data.email
+        ? createToken(data)
+        : Promise.reject(data))
+    .then(token => res.json(token))
     .catch(err => res.status(400).json(err));
 };
 

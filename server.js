@@ -23,22 +23,16 @@ Modules / Dependencies:
 */
 
 const express = require("express");
+const passport = require('passport');
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
-const knex = require("knex");
+const db = require('./db/db');
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
-
-const db = knex({
-  client: "pg",
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-  }
-});
+require("./controllers/authorize");
 
 const app = express();
 
@@ -53,13 +47,11 @@ app.post("/signin", (req, res) => {
   signin.signinAuthentication(req, res, db, bcrypt);
 });
 
-// add authentication middleware
 app.put("/image", (req, res) => {
   image.handleImage(req, res, db);
 });
 
-// add authentication middleware
-app.post("/imageurl", (req, res) => {
+app.post("/imageurl", passport.authenticate('jwt', { session: false }), (req, res) => {
   image.handleApiCall(req, res);
 });
 
