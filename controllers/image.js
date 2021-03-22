@@ -1,5 +1,6 @@
 const Clarifai = require("clarifai");
-
+const tweetobtUrl = process.env.TWEETBOT_URL;
+console.log({tweetobtUrl})
 const app = new Clarifai.App({
   apiKey: process.env.CLARIFAI_API_KEY
 });
